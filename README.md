@@ -151,6 +151,12 @@ Remarketing initiatives can help nurture leads and improve customer conversion r
 
 ---
 
+## 📈 Business Insights
+
+<img width="2108" height="1316" alt="image" src="https://github.com/user-attachments/assets/40c53ec4-9b54-45c2-827e-d4a9fb967793" />
+
+---
+
 ## 📁 Project Structure
 
 ```text
