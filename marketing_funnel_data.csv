@@ -1,0 +1,194 @@
+import pandas as pd
+import random
+
+random.seed(42)
+
+months = [
+    ("2025-01-01", "Jan"),
+    ("2025-02-01", "Feb"),
+    ("2025-03-01", "Mar"),
+    ("2025-04-01", "Apr"),
+    ("2025-05-01", "May"),
+    ("2025-06-01", "Jun"),
+    ("2025-07-01", "Jul"),
+    ("2025-08-01", "Aug"),
+    ("2025-09-01", "Sep"),
+    ("2025-10-01", "Oct"),
+    ("2025-11-01", "Nov"),
+    ("2025-12-01", "Dec")
+]
+
+channels = {
+    "Facebook Ads": [
+        "Remarketing",
+        "Seasonal Campaign"
+    ],
+
+    "Google Ads": [
+        "Search Campaign",
+        "Performance Max"
+    ],
+
+    "Instagram": [
+        "Reels Campaign",
+        "Influencer Promo"
+    ],
+
+    "Email Marketing": [
+        "Newsletter",
+        "Retention Campaign"
+    ],
+
+    "Organic Search": [
+        "SEO Blog",
+        "Evergreen Content"
+    ],
+
+    "LinkedIn Ads": [
+        "B2B Leads",
+        "Enterprise Outreach"
+    ]
+}
+
+base_visitors = {
+    "Facebook Ads": 6000,
+    "Google Ads": 7500,
+    "Instagram": 5500,
+    "Email Marketing": 4200,
+    "Organic Search": 9000,
+    "LinkedIn Ads": 3800
+}
+
+lead_rate = {
+    "Facebook Ads": 0.13,
+    "Google Ads": 0.17,
+    "Instagram": 0.12,
+    "Email Marketing": 0.23,
+    "Organic Search": 0.15,
+    "LinkedIn Ads": 0.16
+}
+
+qualified_rate = {
+    "Facebook Ads": 0.68,
+    "Google Ads": 0.72,
+    "Instagram": 0.66,
+    "Email Marketing": 0.84,
+    "Organic Search": 0.75,
+    "LinkedIn Ads": 0.70
+}
+
+customer_rate = {
+    "Facebook Ads": 0.30,
+    "Google Ads": 0.35,
+    "Instagram": 0.28,
+    "Email Marketing": 0.48,
+    "Organic Search": 0.44,
+    "LinkedIn Ads": 0.27
+}
+
+base_spend = {
+    "Facebook Ads": 30000,
+    "Google Ads": 45000,
+    "Instagram": 25000,
+    "Email Marketing": 9000,
+    "Organic Search": 6000,
+    "LinkedIn Ads": 26000
+}
+
+avg_order_value = {
+
+    "Facebook Ads":300,
+
+    "Google Ads":350,
+
+    "Instagram":250,
+
+    "Email Marketing":450,
+
+    "Organic Search":350,
+
+    "LinkedIn Ads":500
+
+}
+
+data = []
+
+for month_idx, (date, month) in enumerate(months):
+
+    seasonal_multiplier = 1 + (month_idx * 0.03)
+
+    if month in ["Oct", "Nov", "Dec"]:
+        seasonal_multiplier += 0.15
+
+    for channel, campaigns in channels.items():
+
+        for campaign in campaigns:
+
+            visitors = int(
+                base_visitors[channel]
+                * seasonal_multiplier
+                * random.uniform(0.92, 1.08)
+            )
+
+            leads = int(
+                visitors
+                * lead_rate[channel]
+                * random.uniform(0.95, 1.05)
+            )
+
+            qualified = int(
+                leads
+                * qualified_rate[channel]
+                * random.uniform(0.95, 1.05)
+            )
+
+            customers = int(
+                qualified
+                * customer_rate[channel]
+                * random.uniform(0.95, 1.05)
+            )
+
+            spend = int(
+                base_spend[channel]
+                * seasonal_multiplier
+                * random.uniform(0.95, 1.10)
+            )
+
+            revenue = int(
+                customers
+                * avg_order_value[channel]
+                * random.uniform(0.95, 1.15)
+            )
+
+            roi = round(
+                ((revenue - spend) / spend) * 100,
+                2
+            )
+
+            data.append({
+
+                "Date": date,
+                "Month": month,
+                "Channel": channel,
+                "Campaign": campaign,
+
+                "Visitors": visitors,
+                "Leads": leads,
+                "Qualified_Leads": qualified,
+                "Customers": customers,
+
+                "Spend": spend,
+                "Revenue": revenue,
+                "ROI_%": roi
+            })
+
+df = pd.DataFrame(data)
+
+print("Total Rows:", len(df))
+
+df.to_csv(
+    "marketing_funnel_data.csv",
+    index=False
+)
+
+df.head()
